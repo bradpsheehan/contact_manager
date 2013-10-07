@@ -1,6 +1,13 @@
 class ContactsController < ApplicationController
 
+  respond_to :json
+
   def index
+    @contacts ||= Contact.all
+    render json: @contacts
+  end
+
+  def new
     @new_contact = Contact.new
   end
 
@@ -9,8 +16,9 @@ class ContactsController < ApplicationController
                                                                   :first_name,
                                                                   :email,
                                                                   :phone_number))
-    redirect_to root_path
+    redirect_to new_contact_path
   end
+
 
 
 end
