@@ -1,6 +1,6 @@
 ContactManager::Application.routes.draw do
 
-  root "contacts#index"
+  root "application#index"
   resources :contacts
 
 end

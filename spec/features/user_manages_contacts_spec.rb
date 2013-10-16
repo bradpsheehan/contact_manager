@@ -3,7 +3,6 @@ require 'spec_helper'
 describe 'user creates a new contact' do
   it 'can create a new contact' do
     visit new_contact_path
-    # save_and_open_page
     fill_in 'contact_first_name', :with => "Bradley"
     fill_in 'contact_last_name', :with => "brad@example.com"
     fill_in 'contact_email', :with => "brad@example.com"
