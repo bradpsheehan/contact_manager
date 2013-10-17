@@ -1,6 +1,7 @@
 (function() {
 
-var contacts = { [
+var contacts =
+    [
       {
         id: 1,
         last_name: "Sheehan",
@@ -64,14 +65,13 @@ var contacts = { [
         created_at: "2013-10-16T16:20:44.545Z",
         updated_at: "2013-10-16T16:20:44.545Z"
       }
-    ]
-};
+    ];
 
     // define the DOM elements and common variables you'll need
     var searchForm = document.getElementById("search-form"),
       searchField = document.getElementById("q"),
       getAllButton = document.getElementById("get-all"),
-      count = contacts[0].length
+      count = contacts.length
       target = document.getElementById("output");
 
     // define address book methods
@@ -120,7 +120,7 @@ var contacts = { [
                 // loop through the contacts
                 for(i = 0; i < count; i++) {
 
-                    var obj = contacts.addressBook[i];
+                    var obj = contacts[i];
 
                     target.innerHTML += '<p>' + obj.first_name + ', <a href="mailto:' + obj.email + '">' + obj.email +'</a><p>'
 
