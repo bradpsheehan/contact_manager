@@ -96,12 +96,12 @@ var contacts =
                 for(i = 0; i < count; i++) {
 
                     // look through the first name value to see if it contains the searchTerm string
-                    var obj = contacts[i],
-                        isItFound = obj.first_name.indexOf(searchValue);
+                    var contact = contacts[i],
+                        isItFound = contact.first_name.indexOf(searchValue);
 
                     // anything other than -1 means we found a match
                     if(isItFound !== -1) {
-                        target.innerHTML += '<p>' + obj.first_name + ', <a href="mailto:' + obj.email + '">' + obj.email +'</a><p>';
+                        target.innerHTML += '<p>' + contact.first_name + ', <a href="mailto:' + contact.email + '">' + contact.email +'</a><p>';
                     } //end if
 
                 } //end for
@@ -120,9 +120,9 @@ var contacts =
                 // loop through the contacts
                 for(i = 0; i < count; i++) {
 
-                    var obj = contacts[i];
+                    var contact = contacts[i];
 
-                    target.innerHTML += '<p>' + obj.first_name + ', <a href="mailto:' + obj.email + '">' + obj.email +'</a><p>'
+                    target.innerHTML += '<p>' + contact.first_name + ', <a href="mailto:' + contact.email + '">' + contact.email +'</a><p>'
 
                 } //end for
 
