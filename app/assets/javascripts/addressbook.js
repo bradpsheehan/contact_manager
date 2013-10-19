@@ -64,7 +64,7 @@ function ajaxCall(dataUrl, outputElement, callback) {
 
             var output = document.getElementById("output")
 
-            ajaxCall('contacts.json', output, function(data){
+            ajaxCall('http://localhost:3000/contacts.json', output, function(data){
 
                 var searchValue = searchField.value,
                     contacts = data,
@@ -98,7 +98,7 @@ function ajaxCall(dataUrl, outputElement, callback) {
 
             var output = document.getElementById("output");
 
-            ajaxCall('contacts.json', output, function(data) {
+            ajaxCall('http://localhost:3000/contacts.json', output, function(data) {
 
                 var contacts = data,
                     count = contacts.length,
