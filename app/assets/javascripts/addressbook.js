@@ -1,132 +1,124 @@
+// Standard Ajax xhr function
+
+function getHTTPObject() {
+
+    var xhr;
+
+    if (window.XMLHttpRequest) { //check for support
+
+        // if it's supported use it because it's better
+        xhr = new XMLHttpRequest();
+
+    } else if (window.ACtiveXObject) { //chec for the IE 6 Ajax
+
+        //save it to the xhr variable
+        xhr = new ACtiveXObject("Msxm12.XMLHTTP");
+    }
+
+    return xhr;
+
+}
+
+// define the Ajax call
+
+function ajaxCall(dataUrl, outputElement, callback) {
+
+    var request = getHTTPObject();
+
+    outputElement.innerHTML = "Loading..."
+
+    request.onreadystatechange = function() {
+
+        //check to see if the Ajax call went through
+        if ( request.readyState === 4 && request.status === 200 ) {
+
+            //save the ajax response to a variable
+            var contacts = JSON.parse(request.responseText);
+
+            //make sure the callback is indeed a function before executing it
+            if (typeof callback === "function") {
+
+                callback(contacts);
+
+            } //end check
+
+        } //end ajax status check
+
+    } //end on readystatechange
+
+    request.open("GET", dataUrl, true);
+    request.send(null)
+};
+
+
 (function() {
 
-var contacts =
-    [
-      {
-        id: 1,
-        last_name: "Sheehan",
-        first_name: "Brad",
-        email: "brad@example.com",
-        phone_number: "(303)717-1234",
-        created_at: "2013-10-07T22:05:47.976Z",
-        updated_at: "2013-10-07T22:05:47.976Z"
-      },
-      {
-        id: 2,
-        last_name: "Griesemer",
-        first_name: "Alice",
-        email: "ag@example.com",
-        phone_number: "(123) 123-1234",
-        created_at: "2013-10-07T22:06:35.667Z",
-        updated_at: "2013-10-07T22:06:35.667Z"
-      },
-      {
-        id: 3,
-        last_name: "Sheehan",
-        first_name: "Daniel",
-        email: "dan@example.com",
-        phone_number: "(303) 123-456",
-        created_at: "2013-10-15T21:09:07.059Z",
-        updated_at: "2013-10-15T21:09:07.059Z"
-      },
-      {
-        id: 4,
-        last_name: "Sheehan",
-        first_name: "Brian",
-        email: "brian@example.com",
-        phone_number: "(303) 123-4567",
-        created_at: "2013-10-16T15:26:06.953Z",
-        updated_at: "2013-10-16T15:26:06.953Z"
-      },
-      {
-        id: 5,
-        last_name: "Horne",
-        first_name: "Ben",
-        email: "ben@example.com",
-        phone_number: "(720)123-4567",
-        created_at: "2013-10-16T15:26:26.280Z",
-        updated_at: "2013-10-16T15:26:26.280Z"
-      },
-      {
-        id: 6,
-        last_name: "Orenstein",
-        first_name: "Ben",
-        email: "beno@example.com",
-        phone_number: "(970) 123-1234",
-        created_at: "2013-10-16T16:19:21.672Z",
-        updated_at: "2013-10-16T16:19:21.672Z"
-      },
-      {
-        id: 7,
-        last_name: "VanPelt",
-        first_name: "Bradlee",
-        email: "bradlee@example.com",
-        phone_number: "(970)567-7890",
-        created_at: "2013-10-16T16:20:44.545Z",
-        updated_at: "2013-10-16T16:20:44.545Z"
-      }
-    ];
+    var searchForm   = document.getElementById("search-form"),
+        searchField  = document.getElementById("q"),
+        getAllButton = document.getElementById("get-all"),
+        target       = document.getElementById("output");
 
-    // define the DOM elements and common variables you'll need
-    var searchForm = document.getElementById("search-form"),
-      searchField = document.getElementById("q"),
-      getAllButton = document.getElementById("get-all"),
-      count = contacts.length
-      target = document.getElementById("output");
-
-    // define address book methods
     var addr = {
 
         search : function(event) {
 
-            // save the input value, contacts length and i to variables
-            var searchValue = searchField.value,
-            i;
+            var output = document.getElementById("output")
 
-            // stop the default behavior
-            event.preventDefault();
+            ajaxCall('contacts.json', output, function(data){
 
-            //clear the target area just in case there's something in it.
-            target.innerHTML = "";
+                var searchValue = searchField.value,
+                    contacts = data,
+                    count = contacts.length,
+                    i;
 
-            //check the count
-            if(count > 0 && searchValue !== "") {
+                event.preventDefault();
 
-                //loop through the contacts
-                for(i = 0; i < count; i++) {
+                target.innerHTML = "";
 
-                    // look through the first name value to see if it contains the searchTerm string
-                    var contact = contacts[i],
-                        isItFound = contact.first_name.indexOf(searchValue);
+                if(count > 0 && searchValue !== "") {
 
-                    // anything other than -1 means we found a match
-                    if(isItFound !== -1) {
-                        target.innerHTML += '<p>' + contact.first_name + ', <a href="mailto:' + contact.email + '">' + contact.email +'</a><p>';
-                    } //end if
+                    for(i = 0; i < count; i++) {
 
-                } //end for
+                        var contact = contacts[i],
+                            isItFound = contact.first_name.indexOf(searchValue);
 
-            } //end count check
+                        // anything other than -1 means we found a match
+                        if(isItFound !== -1) {
+                            target.innerHTML += '<p>' + contact.first_name + ', <a href="mailto:' + contact.email + '">' + contact.email +'</a><p>';
+                        } //end if
+
+                    } //end for loop through contacts
+
+                } //end count check
+
+            });//end ajax call
+
         },
         getAllContacts : function() {
-            var i;
 
-            //clear the target area just in case there's something in it.
-            target.innerHTML = ""
+            var output = document.getElementById("output");
 
-            //check the count
-            if(count > 0) {
+            ajaxCall('contacts.json', output, function(data) {
 
-                // loop through the contacts
-                for(i = 0; i < count; i++) {
+                var contacts = data,
+                    count = contacts.length,
+                    i;
 
-                    var contact = contacts[i];
+                target.innerHTML = ""
 
-                    target.innerHTML += '<p>' + contact.first_name + ', <a href="mailto:' + contact.email + '">' + contact.email +'</a><p>'
+                if(count > 0) {
 
-                } //end for
+                    for(i = 0; i < count; i++) {
 
-            } //end count check
+                        var contact = contacts[i];
+
+                        target.innerHTML += '<p>' + contact.first_name + ', <a href="mailto:' + contact.email + '">' + contact.email +'</a><p>'
+
+                    } //end for loop through contacts
+
+                } //end count check
+
+            }); //end ajax call
 
         },
 
