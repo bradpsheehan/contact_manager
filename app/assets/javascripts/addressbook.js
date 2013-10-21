@@ -1,139 +1,82 @@
-function getHTTPObject() {
+(function(){
 
-    var xhr;
-
-    if (window.XMLHttpRequest) { //check for support
-
-         xhr = new XMLHttpRequest();
-
-    } else if (window.ACtiveXObject) { //check for the IE 6 Ajax
-
-        xhr = new ACtiveXObject("Msxm12.XMLHTTP");
-    }
-
-    return xhr;
-
-}
-
-function ajaxCall(dataUrl, outputElement, callback) {
-
-    var request = getHTTPObject();
-
-    outputElement.innerHTML = "Loading..."
-
-    request.onreadystatechange = function() {
-
-        if ( request.readyState === 4 && request.status === 200 ) {
-
-            var contacts = JSON.parse(request.responseText);
-
-            if (typeof callback === "function") {
-
-                callback(contacts);
-
-            } //end check
-
-        } //end ajax status check
-
-    } //end on readystatechange
-
-    request.open("GET", dataUrl, true);
-    request.send(null)
-};
-
-
-(function() {
-
-    var searchForm   = document.getElementById("search-form"),
-        searchField  = document.getElementById("q"),
-        getAllButton = document.getElementById("get-all"),
-        target       = document.getElementById("output");
-
-    var addr = {
+    var addressbook = {
 
         search : function(event) {
 
-            var output = document.getElementById("output")
+            $.getJSON('/contacts.json', function(data){
 
-            ajaxCall('/contacts.json', output, function(data){
-
-                var searchValue = searchField.value,
+                var searchValue = $('#q').val();
                     contacts = data,
-                    count = contacts.length,
-                    i;
+                    contacts_count = contacts.length;
 
-                event.preventDefault();
+                $('#output').empty();
 
-                target.innerHTML = "";
+                if(contacts_count > 0 && searchValue !== "") {
 
-                if(count > 0 && searchValue !== "") {
+                    $.each(contacts, function(i, contact) {
 
-                    for(i = 0; i < count; i++) {
+                        var findByFirstName = contact.first_name.indexOf(searchValue);
+                        var findByLastName = contact.last_name.indexOf(searchValue);
 
-                        var contact = contacts[i],
-                            isItFound = contact.first_name.indexOf(searchValue);
+                        if( findByFirstName !== -1 || findByLastName !== -1) {
 
-                        // anything other than -1 means we found a match
-                        if(isItFound !== -1) {
-                            target.innerHTML += '<p>' + contact.first_name + ', <a href="mailto:' + contact.email + '">' + contact.email +'</a><p>';
+                            $('#output').append('<p>' + contact.first_name + ', <a href="mailto:' + contact.email + '">'+ contact.email +'</a><p>').hide().fadeIn();
+
                         } //end if
 
-                    } //end for loop through contacts
+                    }); // end each
 
-                } //end count check
+                } // end if
 
-            });//end ajax call
-
+            }); // end ajax call
         },
-        getAllContacts : function() {
 
-            var output = document.getElementById("output");
+        getAllContacts : function(event) {
 
-            ajaxCall('/contacts.json', output, function(data) {
+            event.preventDefault();
+
+            $.getJSON('/contacts.json', function(data){
 
                 var contacts = data,
-                    count = contacts.length,
-                    i;
+                    contacts_count = contacts.length;
 
-                target.innerHTML = ""
+                $('#output').empty();
 
-                if(count > 0) {
+                if(contacts_count > 0) {
 
-                    for(i = 0; i < count; i++) {
+                    $.each(contacts, function(i, contact) {
 
-                        var contact = contacts[i];
+                        $('#output').append('<p>' + contact.first_name + ', <a href="mailto:' + contact.email + '">'+ contact.email +'</a><p>').hide().fadeIn();
 
-                        target.innerHTML += '<p>' + contact.first_name + ', <a href="mailto:' + contact.email + '">' + contact.email +'</a><p>'
+                    }); // end each
 
-                    } //end for loop through contacts
+                } // end if
 
-                } //end count check
-
-            }); //end ajax call
-
-        },
-
-        setActiveSection : function() {
-            this.parentNode.setAttribute("class", "active");
-        },
-        removeActiveSection : function() {
-            this.parentNode.removeAttribute("class");
-        },
-        addHoverClass : function() {
-            searchForm.setAttribute("class", "hovering");
-        },
-        removeHoverClass : function() {
-            searchForm.removeAttribute("class")
+            }); // end ajax call
         }
+    } // end addressbook obj
 
-    } //end addr object
+    $("#q").keyup(addressbook.search).focus(function () {
 
-    searchField.addEventListener("keyup", addr.search, false);
-    searchField.addEventListener("focus", addr.setActiveSection, false);
-    searchField.addEventListener("blur", addr.removeActiveSection, false);
-    getAllButton.addEventListener("click", addr.getAllContacts, false);
-    searchForm.addEventListener("mouseover", addr.addHoverClass, false);
-    searchForm.addEventListener("mouseout", addr.removeHoverClass, false);
-    searchForm.addEventListener("submit", addr.search, false);
+            $(this).parent().addClass("active");
 
-})(); //end anonymous function
+        }).blur(function () {
+
+            $(this).parent().removeClass("active");
+
+        });
+
+    $("#search-form").hover(function () {
+        $(this).addClass("hovering");
+
+    }, function () {
+
+        $(this).removeClass("hovering");
+
+    }).submit(addressbook.search);
+
+    $("#get-all").click(addressbook.getAllContacts);
+
+
+})(); // end anon function
