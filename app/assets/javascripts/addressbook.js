@@ -21,7 +21,7 @@
 
                         if( findByFirstName !== -1 || findByLastName !== -1) {
 
-                            $('#output').append('<p>' + contact.first_name + ', <a href="mailto:' + contact.email + '">'+ contact.email +'</a><p>').hide().fadeIn();
+                            $('#output').append('<p>' + contact.first_name + ' ' + contact.last_name + ', <a href="mailto:' + contact.email + '">'+ contact.email +'</a><p>').hide().fadeIn();
 
                         } //end if
 
@@ -47,7 +47,7 @@
 
                     $.each(contacts, function(i, contact) {
 
-                        $('#output').append('<p>' + contact.first_name + ', <a href="mailto:' + contact.email + '">'+ contact.email +'</a><p>').hide().fadeIn();
+                        $('#output').append('<p>' + contact.first_name + ' ' + contact.last_name + ', <a href="mailto:' + contact.email + '">'+ contact.email +'</a><p>').hide().fadeIn();
 
                     }); // end each
 
