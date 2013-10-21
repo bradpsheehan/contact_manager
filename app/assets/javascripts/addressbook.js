@@ -1,25 +1,19 @@
-// Standard Ajax xhr function
-
 function getHTTPObject() {
 
     var xhr;
 
     if (window.XMLHttpRequest) { //check for support
 
-        // if it's supported use it because it's better
-        xhr = new XMLHttpRequest();
+         xhr = new XMLHttpRequest();
 
-    } else if (window.ACtiveXObject) { //chec for the IE 6 Ajax
+    } else if (window.ACtiveXObject) { //check for the IE 6 Ajax
 
-        //save it to the xhr variable
         xhr = new ACtiveXObject("Msxm12.XMLHTTP");
     }
 
     return xhr;
 
 }
-
-// define the Ajax call
 
 function ajaxCall(dataUrl, outputElement, callback) {
 
@@ -29,13 +23,10 @@ function ajaxCall(dataUrl, outputElement, callback) {
 
     request.onreadystatechange = function() {
 
-        //check to see if the Ajax call went through
         if ( request.readyState === 4 && request.status === 200 ) {
 
-            //save the ajax response to a variable
             var contacts = JSON.parse(request.responseText);
 
-            //make sure the callback is indeed a function before executing it
             if (typeof callback === "function") {
 
                 callback(contacts);
@@ -64,7 +55,7 @@ function ajaxCall(dataUrl, outputElement, callback) {
 
             var output = document.getElementById("output")
 
-            ajaxCall('http://localhost:3000/contacts.json', output, function(data){
+            ajaxCall('/contacts.json', output, function(data){
 
                 var searchValue = searchField.value,
                     contacts = data,
@@ -98,7 +89,7 @@ function ajaxCall(dataUrl, outputElement, callback) {
 
             var output = document.getElementById("output");
 
-            ajaxCall('http://localhost:3000/contacts.json', output, function(data) {
+            ajaxCall('/contacts.json', output, function(data) {
 
                 var contacts = data,
                     count = contacts.length,
@@ -122,11 +113,27 @@ function ajaxCall(dataUrl, outputElement, callback) {
 
         },
 
+        setActiveSection : function() {
+            this.parentNode.setAttribute("class", "active");
+        },
+        removeActiveSection : function() {
+            this.parentNode.removeAttribute("class");
+        },
+        addHoverClass : function() {
+            searchForm.setAttribute("class", "hovering");
+        },
+        removeHoverClass : function() {
+            searchForm.removeAttribute("class")
+        }
+
     } //end addr object
 
-    // activate event listeners
-    searchField.addEventListener("keyup", addr.search, false)
-    getAllButton.addEventListener("click", addr.getAllContacts, false)
-    searchForm.addEventListener("submit", addr.search, false)
+    searchField.addEventListener("keyup", addr.search, false);
+    searchField.addEventListener("focus", addr.setActiveSection, false);
+    searchField.addEventListener("blur", addr.removeActiveSection, false);
+    getAllButton.addEventListener("click", addr.getAllContacts, false);
+    searchForm.addEventListener("mouseover", addr.addHoverClass, false);
+    searchForm.addEventListener("mouseout", addr.removeHoverClass, false);
+    searchForm.addEventListener("submit", addr.search, false);
 
 })(); //end anonymous function
