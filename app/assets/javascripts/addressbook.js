@@ -1,82 +1,96 @@
-(function(){
+$.fn.contactSearcher = function(options) {
 
-    var addressbook = {
+    var defaults = {
+        path: "/contacts.json",
+        outputId: "#output"
+    };
 
-        search : function(event) {
+    var options = $.extend(defaults, options);
 
-            $.getJSON('/contacts.json', function(data){
+    return this.each(function() {
 
-                var searchValue = $('#q').val();
-                    contacts = data,
-                    contacts_count = contacts.length;
+        $(document).ready( function() {
 
-                $('#output').empty();
+            var addressbook = {
 
-                if(contacts_count > 0 && searchValue !== "") {
+                search : function(event) {
 
-                    $.each(contacts, function(i, contact) {
+                    $.getJSON(options.path, function(data){
 
-                        var findByFirstName = contact.first_name.indexOf(searchValue);
-                        var findByLastName = contact.last_name.indexOf(searchValue);
+                        var searchValue = $('#q').val(),
+                            contacts = data,
+                            contacts_count = contacts.length;
 
-                        if( findByFirstName !== -1 || findByLastName !== -1) {
+                        $(options.outputId).empty();
 
-                            $('#output').append('<p>' + contact.first_name + ' ' + contact.last_name + ', <a href="mailto:' + contact.email + '">'+ contact.email +'</a><p>').hide().fadeIn();
+                        if(contacts_count > 0 && searchValue !== "") {
 
-                        } //end if
+                            $.each(contacts, function(i, contact) {
 
-                    }); // end each
+                                var findByFirstName = contact.first_name.indexOf(searchValue);
+                                var findByLastName = contact.last_name.indexOf(searchValue);
 
-                } // end if
+                                if( findByFirstName !== -1 || findByLastName !== -1) {
 
-            }); // end ajax call
-        },
+                                    $(options.outputId).append('<p>' + contact.first_name + ' ' + contact.last_name + ', <a href="mailto:' + contact.email + '">'+ contact.email +'</a><p>').hide().fadeIn();
 
-        getAllContacts : function(event) {
+                                } //end if
 
-            event.preventDefault();
+                            }); // end each
 
-            $.getJSON('/contacts.json', function(data){
+                        } // end if
 
-                var contacts = data,
-                    contacts_count = contacts.length;
+                    }); // end ajax call
+                },
 
-                $('#output').empty();
+                getAllContacts : function(event) {
 
-                if(contacts_count > 0) {
+                    event.preventDefault();
 
-                    $.each(contacts, function(i, contact) {
+                    $.getJSON(options.path, function(data){
 
-                        $('#output').append('<p>' + contact.first_name + ' ' + contact.last_name + ', <a href="mailto:' + contact.email + '">'+ contact.email +'</a><p>').hide().fadeIn();
+                        var contacts = data,
+                            contacts_count = contacts.length;
 
-                    }); // end each
+                        $(options.outputId).empty();
 
-                } // end if
+                        if(contacts_count > 0) {
 
-            }); // end ajax call
-        }
-    } // end addressbook obj
+                            $.each(contacts, function(i, contact) {
 
-    $("#q").keyup(addressbook.search).focus(function () {
+                                $(options.outputId).append('<p>' + contact.first_name + ' ' + contact.last_name + ', <a href="mailto:' + contact.email + '">'+ contact.email +'</a><p>').hide().fadeIn();
 
-            $(this).parent().addClass("active");
+                            }); // end each
 
-        }).blur(function () {
+                        } // end if
 
-            $(this).parent().removeClass("active");
+                    }); // end ajax call
+                }
+            }; // end addressbook obj
+
+            $("#q").keyup(addressbook.search).focus(function () {
+
+                    $(this).parent().addClass("active");
+
+                }).blur(function () {
+
+                    $(this).parent().removeClass("active");
+
+            });
+
+            $("#search-form").hover(function () {
+                $(this).addClass("hovering");
+
+            }, function () {
+
+                $(this).removeClass("hovering");
+
+            }).submit(addressbook.search);
+
+            $("#get-all").click(addressbook.getAllContacts);
 
         });
 
-    $("#search-form").hover(function () {
-        $(this).addClass("hovering");
+    }); // end loop
 
-    }, function () {
-
-        $(this).removeClass("hovering");
-
-    }).submit(addressbook.search);
-
-    $("#get-all").click(addressbook.getAllContacts);
-
-
-})(); // end anon function
+}; // end plugin
