@@ -32,7 +32,13 @@ $.fn.contactSearcher = function(options) {
 
                                 if( findByFirstName !== -1 || findByLastName !== -1) {
 
-                                    $(options.outputId).append('<p>' + contact.first_name + ' ' + contact.last_name + ', <a href="mailto:' + contact.email + '">'+ contact.email +'</a><p>').hide().fadeIn();
+                                    var source = $('#output-template').html();
+                                    var template = Handlebars.compile(source);
+                                    var context = {first_name: contact.first_name, last_name: contact.last_name, email: contact.email}
+                                    var html = template(context);
+                                    $('#output').append(html);
+
+                                    //$(options.outputId).append('<p>' + contact.first_name + ' ' + contact.last_name + ', <a href="mailto:' + contact.email + '">'+ contact.email +'</a><p>').hide().fadeIn();
 
                                 } //end if
 
@@ -58,7 +64,13 @@ $.fn.contactSearcher = function(options) {
 
                             $.each(contacts, function(i, contact) {
 
-                                $(options.outputId).append('<p>' + contact.first_name + ' ' + contact.last_name + ', <a href="mailto:' + contact.email + '">'+ contact.email +'</a><p>').hide().fadeIn();
+                                var source = $('#output-template').html();
+                                var template = Handlebars.compile(source);
+                                var context = {first_name: contact.first_name, last_name: contact.last_name, email: contact.email}
+                                var html = template(context);
+                                $('#output').append(html);
+
+                                //$(options.outputId).append('<p>' + contact.first_name + ' ' + contact.last_name + ', <a href="mailto:' + contact.email + '">'+ contact.email +'</a><p>').hide().fadeIn();
 
                             }); // end each
 
