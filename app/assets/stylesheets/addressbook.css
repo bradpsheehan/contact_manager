@@ -1,11 +1,53 @@
-.active {
-  background: #ddd;
-}
-
-.hovering {
-  background: #eee;
+body {
+  background-color: whitesmoke;
 }
 
 form > div {
   padding: 10px;
+}
+.container {
+  position:absolute;
+  width:300px;
+  z-index:-15;
+  top:40%;
+  left:50%;
+  margin:-150px 0 0 -150px;
+  border-radius: 6px;
+}
+#output {
+  padding-left: 5%;
+  height: 350px;
+  overflow: scroll;
+  font-size: 1.2em;
+}
+#form-label {
+  margin-bottom: 10px;
+  text-align: center;
+  font-size: 2.5em;
+}
+#q {
+  width: 100%;
+}
+button {
+  border: none;
+  outline: none;
+  background-color: #90ee90;
+  border-radius: 6px;
+  height: 30px;
+  color: white;
+}
+button:hover {
+  background-color: #74E274;
+  -webkit-transition: all 500ms ease;
+  -moz-transition: all 500ms ease;
+  -ms-transition: all 500ms ease;
+  -o-transition: all 500ms ease;
+  transition: all 500ms ease;
+}
+#get-all {
+  float: right;
+  font-size: 1em
+}
+#search-btn {
+  font-size: 1em
 }

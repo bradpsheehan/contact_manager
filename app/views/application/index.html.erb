@@ -1,30 +1,37 @@
-<form action="" method="get" id="search-form">
+<div id="main" class="container">
+  <form action="" method="get" id="search-form">
+      <div>
+          <div id="form-label">
+            <label for="q">Contacts</label>
+          </div>
+          <input type="search" id="q" name="q" required placeholder="type a name" autocomplete="off" x-webkit-speech onwebkitspeechchange="onChange(this.value)">
+      </div>
 
-    <div>
-        <label for="q">Search address book</label>
-        <input type="search" id="q" name="q" required placeholder="type a name" autocomplete="off">
-    </div>
+      <div class="button-group">
+          <button type="submit" id="search-btn">search</button>
+          <button type="button" id="get-all">show all</button>
+      </div>
+  </form>
 
-    <div class="button-group">
-        <button type="submit" id="search-btn">search</button>
-        <button type="button" id="get-all">get all contacts</button>
-    </div>
+  <div id="output" aria-automatic="true" aria-live="polite" aria-relevant="additions removals"></div>
 
-</form>
-
-<div id="output" aria-automatic="true" aria-live="polite" aria-relevant="additions removals"></div>
 
 <%= javascript_include_tag "application" %>
 <%= javascript_include_tag "addressbook" %>
 
 <script id="output-template" type="text/x-handlebars-template">
-  {{first_name}} {{last_name}},
-  <a href="mailto: {{contact.email}} ">{{email}}</a></br>
+  <table id="output-table">
+    <tr>
+      <td>{{first_name}} {{last_name}}, <a href="mailto: {{contact.email}} ">{{email}}</a></td>
+    </tr>
+  </table>
 </script>
+
 
 <script type="text/javascript">
   $(document).ready(function() {
       $('#q').contactSearcher();
   });
 </script>
+
 

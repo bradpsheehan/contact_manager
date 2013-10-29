@@ -38,8 +38,6 @@ $.fn.contactSearcher = function(options) {
                                     var html = template(context);
                                     $('#output').append(html);
 
-                                    //$(options.outputId).append('<p>' + contact.first_name + ' ' + contact.last_name + ', <a href="mailto:' + contact.email + '">'+ contact.email +'</a><p>').hide().fadeIn();
-
                                 } //end if
 
                             }); // end each
@@ -70,8 +68,6 @@ $.fn.contactSearcher = function(options) {
                                 var html = template(context);
                                 $('#output').append(html);
 
-                                //$(options.outputId).append('<p>' + contact.first_name + ' ' + contact.last_name + ', <a href="mailto:' + contact.email + '">'+ contact.email +'</a><p>').hide().fadeIn();
-
                             }); // end each
 
                         } // end if
@@ -88,6 +84,16 @@ $.fn.contactSearcher = function(options) {
 
                     $(this).parent().removeClass("active");
 
+            });
+
+            function onChange() {
+              $('#q').bind('webkitspeechchange',function() {
+                addressbook.search;
+              });
+            };
+
+            $('#q').bind('webkitspeechchange',function() {
+                addressbook.search;
             });
 
             $("#search-form").hover(function () {
